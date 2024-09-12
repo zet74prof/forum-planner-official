@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Details{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8 relative z-50 mt-20">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">User Details</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="mb-4">
+                <h2 class="text-xl font-semibold text-gray-700">User Information</h2>
+                <div class="mt-2">
+                    <p class="text-gray-600"><strong>Username:</strong> {{ user.username }}</p>
+                    <p class="text-gray-600"><strong>Email:</strong> {{ user.email }}</p>
+                    <p class="text-gray-600"><strong>Roles:</strong> <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">{{ user.roles|join(', ') }}</span></p>
+                    <p class="text-gray-600"><strong>Google Authenticator Activated:</strong> {{ user.enable2fa ? 'Yes' : 'No' }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="text-indigo-600 hover:text-indigo-900">
+                    Edit User
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('app_user_index') }}" class="text-indigo-600 hover:text-indigo-900">
+                ← Back to list
+            </a>
+        </div>
+    </div>
+{% endblock %}
