@@ -39,7 +39,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $googleAuthenticatorSecret;
 
-    private ?bool $enable2fa = null;
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $enable2fa = false;
 
     public function getId(): ?int
     {
@@ -76,7 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -112,8 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Clear any temporary, sensitive data
     }
 
     public function getUsername(): ?string
@@ -130,7 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     public function isGoogleAuthenticatorEnabled(): bool
     {
-        return null !== $this->googleAuthenticatorSecret;
+        return $this->enable2fa && null !== $this->googleAuthenticatorSecret;
     }
 
     public function getGoogleAuthenticatorUsername(): string
@@ -146,6 +145,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
     {
         $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+    }
+
+    public function isTotpEnabled(): bool
+    {
+        return $this->isGoogleAuthenticatorEnabled();
     }
 
     public function getEnable2fa(): ?bool

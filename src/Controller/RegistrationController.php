@@ -33,12 +33,12 @@ class RegistrationController extends AbstractController
         $plaintextPassword = $user->getPassword();
         $hashedPassword = $passwordHasher->hashPassword($user, $plaintextPassword);
         $user->setPassword($hashedPassword);
-        $user->setRoles(['ROLE_SEMI_IDENTIFIED']);
 
         $enable2fa = $form->get('enable_2fa')->getData();
         if ($enable2fa) {
             $secret = $this->googleAuthenticator->generateSecret();
             $user->setGoogleAuthenticatorSecret($secret);
+            $user->setRoles(['ROLE_2FA']);
         }
 
         // Save user
@@ -46,7 +46,7 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
 
         if ($enable2fa) {
-            return $this->redirectToRoute('activate_2fa', ['id' => $user->getId()]);
+            return $this->redirectToRoute('app_code_login', ['id' => $user->getId()]);
         }
 
         return $this->redirectToRoute('app_login');
