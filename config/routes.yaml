@@ -10,7 +10,7 @@ app_login:
 
 app_code_login:
     path: /code-login
-    controller: App\Controller\SecurityController
+    controller: App\Controller\SecurityController::codeLogin
 
 app_logout:
     path: /logout

@@ -1,3 +1,6 @@
 _security_logout:
     resource: security.route_loader.logout
     type: service
+code_login:
+    path: /code-login
+    controller: App\Controller\SecurityController:codeLogin
