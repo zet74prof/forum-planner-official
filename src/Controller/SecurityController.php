@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
@@ -15,19 +16,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use OTPHP\TOTP;
 
 class SecurityController extends AbstractController
 {
-    private Security $security;
     private GoogleAuthenticatorInterface $googleAuthenticator;
     private EntityManagerInterface $entityManager;
+    private Security $security;
 
-    public function __construct(Security $security, GoogleAuthenticatorInterface $googleAuthenticator, EntityManagerInterface $entityManager)
+    public function __construct(GoogleAuthenticatorInterface $googleAuthenticator, EntityManagerInterface $entityManager, Security $security)
     {
-        $this->security = $security;
         $this->googleAuthenticator = $googleAuthenticator;
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
     #[Route('/login', name: 'app_login')]
@@ -57,21 +57,28 @@ class SecurityController extends AbstractController
     #[Route('/code-login', name: 'app_code_login')]
     public function codeLogin(Request $request): Response
     {
-        $user = $this->security->getUser();
-
-        if (!$user) {
-            throw $this->createAccessDeniedException('User not logged in.');
-        }
+        /** @var User $user */
+        $user = $this->getUser();
 
         if (!$user->getGoogleAuthenticatorSecret()) {
             $secret = $this->googleAuthenticator->generateSecret();
             $user->setGoogleAuthenticatorSecret($secret);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-        } else {
-            $secret = $user->getGoogleAuthenticatorSecret();
         }
 
+        if ($request->isMethod('POST')) {
+            $code = $request->request->get('auth_code');
+            if ($this->googleAuthenticator->checkCode($user, $code)) {
+                $user->setEnable2fa(true);
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+                $this->addFlash('success', '2FA activée avec succès!');
+                return $this->redirectToRoute('app_user_index');
+            } else {
+                $this->addFlash('error', 'Le code est incorrect, veuillez réessayer.');
+            }
+        }
         $qrCodeContent = $this->googleAuthenticator->getQRContent($user);
 
         $result = Builder::create()
@@ -86,24 +93,10 @@ class SecurityController extends AbstractController
 
         $qrCodeUrl = $result->getDataUri();
 
-        if ($request->isMethod('POST')) {
-            $code = $request->request->get('auth_code');
-            if ($this->googleAuthenticator->checkCode($secret, $code)) {
-                $user->setEnable2fa(true);
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-                $this->addFlash('success', '2FA activée avec succès!');
-                return $this->redirectToRoute('home');
-            } else {
-                $this->addFlash('error', 'Le code est incorrect, veuillez réessayer.');
-            }
-        }
-
         return $this->render('security/codelogin.html.twig', [
             'qrCodeUrl' => $qrCodeUrl,
         ]);
     }
-
 
     public function __invoke(Request $request): Response
     {
