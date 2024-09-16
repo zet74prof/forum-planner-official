@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sécurité du profil{% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto py-12 mt-40 bg-white shadow-lg rounded-lg p-8 relative z-50">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Sécurité du compte</h1>
+
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-6 border-b pb-2 text-gray-800">Authentification à deux facteurs (2FA)</h2>
+
+            {% if user.isEnable2fa() %}
+                <div class="mb-6 p-4 border border-green-400 rounded-lg bg-green-50">
+                    <p class="text-green-700">L'authentification à deux facteurs est activée.</p>
+                </div>
+            {% else %}
+                <div class="mb-6 p-4 border border-red-400 rounded-lg bg-red-50">
+                    <p class="text-red-600">L'authentification à deux facteurs est désactivée.</p>
+                    <p class="text-gray-600 mb-4">Pour améliorer la sécurité de votre compte, nous vous recommandons d'activer l'authentification à deux facteurs.</p>
+
+                    <a href="{{ path('app_2fa_setup') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                        Activer l'authentification à deux facteurs
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if qrCodeUrl is defined %}
+            <div class="mb-8 p-4 border border-blue-400 rounded-lg bg-blue-50">
+                <p class="text-gray-600 mb-4">Scannez ce QR code avec votre application Google Authenticator :</p>
+                <div class="flex justify-center mb-4">
+                    <img src="{{ qrCodeUrl }}" alt="QR code pour Google Authenticator" class="rounded-md shadow-lg">
+                </div>
+
+                <form method="post" action="{{ path('app_2fa_check') }}" class="space-y-4">
+                    <div>
+                        <label for="auth_code" class="block font-medium text-gray-700">Entrez le code généré par votre application :</label>
+                        <input type="text" id="auth_code" name="auth_code" required
+                               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Vérifier et activer 2FA
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

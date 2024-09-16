@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
-        <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-md relative z-50">
+        <div class="w-full max-w-lg p-8 bg-white rounded-lg shadow-md relative z-50">
             <h1 class="text-2xl font-bold mb-6 text-gray-800">Créer un compte</h1>
 
             {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
@@ -31,14 +31,8 @@
                     {{ form_widget(form.password, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
                 </div>
                 {{ form_errors(form.password) }}
-            </div>
-
-            <div class="mb-4 flex items-center">
-                <div class="flex relative">
-                    {{ form_widget(form.enable_2fa, {'attr': {'class': 'w-6 h-6 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500'}}) }}
-                </div>
-                {{ form_label(form.enable_2fa, "Activer l'A2F", {'label_attr': {'class': 'block text-sm font-medium text-gray-700 ml-2'}}) }}
-                {{ form_errors(form.enable_2fa) }}
+                <small class="text-gray-600">Le mot de passe doit comporter au moins 8 caractères, dont une lettre majuscule, une minuscule, un chiffre et un caractère spécial.</small>
+                {{ form_errors(form.password) }} {# Afficher les erreurs du champ password #}
             </div>
 
 

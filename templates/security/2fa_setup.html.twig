@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Configuration A2F{% endblock %}
+
+{% block body %}
+    <div class="max-w-3xl mx-auto py-12 relative z-50 mt-20">
+        <h1 class="text-3xl text-center font-bold text-gray-900 mb-8">
+            Configuration de l'authentification à deux facteurs (A2F)
+        </h1>
+
+        <p class="text-lg text-center text-gray-700 mb-4">
+            Scannez le QR Code suivant avec votre application Google Authenticator :
+        </p>
+
+        <div class="flex justify-center mb-8">
+            <img src="{{ qrCodeUrl }}" alt="QR Code" class="border border-gray-300 rounded-md">
+        </div>
+
+        <div class="flex justify-center mx-auto gap-2">
+            <form method="post" action="{{ path('app_2fa_check') }}" class="space-y-4">
+                <div>
+                    <label for="auth_code" class="block font-medium text-gray-700">Entrez le code généré par votre application :</label>
+                    <input type="text" id="auth_code" name="auth_code" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Activer l'authentification à deux facteurs</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

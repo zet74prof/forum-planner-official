@@ -94,7 +94,7 @@ final class UserController extends AbstractController
     public function showQrCode(User $user): Response
     {
         $qrCode = $this->googleAuthenticator->getQRCode($user);
-        return $this->render('security/qrcode.html.twig', [
+        return $this->render('2fa_setup.html.twig', [
             'qrCode' => $qrCode,
         ]);
     }

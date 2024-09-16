@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,16 +22,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @Assert\NotBlank(message="Le mot de passe ne peut pas être vide.")
+     * @Assert\Length(
+     *     min=8,
+     *     minMessage="Le mot de passe doit comporter au moins 8 caractères."
+     * )
+     * @Assert\Regex(
+     *     pattern="/[A-Z]/",
+     *     message="Le mot de passe doit contenir au moins une lettre majuscule."
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-z]/",
+     *     message="Le mot de passe doit contenir au moins une lettre minuscule."
+     * )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     message="Le mot de passe doit contenir au moins un chiffre."
+     * )
+     * @Assert\Regex(
+     *     pattern="/\W/",
+     *     message="Le mot de passe doit contenir au moins un caractère spécial."
+     * )
      */
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -40,6 +59,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $enable2fa = false;
+
+    /**
+     * @var Collection<int, Team>
+     */
+    #[ORM\ManyToMany(targetEntity: Team::class, mappedBy: 'members')]
+    private Collection $teams;
+
+    /**
+     * @var Collection<int, Team>
+     */
+    #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'owner')]
+    private Collection $ownedGroups;
+
+    /**
+     * @var Collection<int, Forum>
+     */
+    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'user')]
+    private Collection $forums;
+
+    public function __construct()
+    {
+        $this->teams = new ArrayCollection();
+        $this->ownedGroups = new ArrayCollection();
+        $this->forums = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -58,21 +102,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     *
-     * @return list<string>
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -81,9 +115,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -91,9 +122,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -106,9 +134,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
         // Clear any temporary, sensitive data
@@ -159,6 +184,98 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEnable2fa(?bool $enable2fa): self
     {
         $this->enable2fa = $enable2fa;
+        return $this;
+    }
+
+    public function isEnable2fa(): bool
+    {
+        return $this->enable2fa;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): static
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams->add($team);
+            $team->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): static
+    {
+        if ($this->teams->removeElement($team)) {
+            $team->removeMember($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getOwnedGroups(): Collection
+    {
+        return $this->ownedGroups;
+    }
+
+    public function addOwnedGroup(Team $ownedGroup): static
+    {
+        if (!$this->ownedGroups->contains($ownedGroup)) {
+            $this->ownedGroups->add($ownedGroup);
+            $ownedGroup->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwnedGroup(Team $ownedGroup): static
+    {
+        if ($this->ownedGroups->removeElement($ownedGroup)) {
+            // set the owning side to null (unless already changed)
+            if ($ownedGroup->getOwner() === $this) {
+                $ownedGroup->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Forum>
+     */
+    public function getForums(): Collection
+    {
+        return $this->forums;
+    }
+
+    public function addForum(Forum $forum): static
+    {
+        if (!$this->forums->contains($forum)) {
+            $this->forums->add($forum);
+            $forum->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForum(Forum $forum): static
+    {
+        if ($this->forums->removeElement($forum)) {
+            // set the owning side to null (unless already changed)
+            if ($forum->getUser() === $this) {
+                $forum->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

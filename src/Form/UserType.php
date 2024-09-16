@@ -38,13 +38,6 @@ class UserType extends AbstractType
                     'placeholder' => 'Enter your password'
                 ],
             ])
-            ->add('enable_2fa', CheckboxType::class, [
-                'label' => "Activer l'authentification à deux facteurs",
-                'required' => false,
-                'attr' => [
-                    'class' => 'w-6 h-6 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500',
-                ],
-            ])
             ->add('save', SubmitType::class, [
                 'label' => 'Register',
                 'attr' => ['class' => 'w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']

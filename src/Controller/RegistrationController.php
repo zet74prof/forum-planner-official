@@ -24,36 +24,37 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_registration_register')]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
-    $user = new User();
+        $user = new User();
 
-    $form = $this->createForm(UserType::class, $user);
-    $form->handleRequest($request);
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $plaintextPassword = $user->getPassword();
-        $hashedPassword = $passwordHasher->hashPassword($user, $plaintextPassword);
-        $user->setPassword($hashedPassword);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plaintextPassword = $user->getPassword();
 
-        $enable2fa = $form->get('enable_2fa')->getData();
-        if ($enable2fa) {
-            $secret = $this->googleAuthenticator->generateSecret();
-            $user->setGoogleAuthenticatorSecret($secret);
-            $user->setRoles(['ROLE_2FA']);
+            // Vérification du mot de passe avec regex
+            if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $plaintextPassword)) {
+                // Ajoute un message d'erreur et renvoie le formulaire
+                $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractères, dont une lettre majuscule, une lettre minuscule, un chiffre, et un caractère spécial.');
+                return $this->render('security/register.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            // Hashage du mot de passe
+            $hashedPassword = $passwordHasher->hashPassword($user, $plaintextPassword);
+            $user->setPassword($hashedPassword);
+
+            // Persist et flush de l'utilisateur dans la base de données
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_login');
         }
 
-        // Save user
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        if ($enable2fa) {
-            return $this->redirectToRoute('app_code_login', ['id' => $user->getId()]);
-        }
-
-        return $this->redirectToRoute('app_login');
+        return $this->render('security/register.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    return $this->render('security/register.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
 }
