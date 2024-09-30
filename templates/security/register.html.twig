@@ -10,6 +10,22 @@
             {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
             <div class="mb-4">
+                {{ form_label(form.nom, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                <div class="mt-1">
+                    {{ form_widget(form.nom, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                </div>
+                {{ form_errors(form.nom) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.prenom, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                <div class="mt-1">
+                    {{ form_widget(form.prenom, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                </div>
+                {{ form_errors(form.prenom) }}
+            </div>
+
+            <div class="mb-4">
                 {{ form_label(form.username, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
                 <div class="mt-1">
                     {{ form_widget(form.username, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
@@ -32,9 +48,13 @@
                 </div>
                 {{ form_errors(form.password) }}
                 <small class="text-gray-600">Le mot de passe doit comporter au moins 8 caractères, dont une lettre majuscule, une minuscule, un chiffre et un caractère spécial.</small>
-                {{ form_errors(form.password) }} {# Afficher les erreurs du champ password #}
             </div>
 
+            <div>
+                <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Register
+                </button>
+            </div>
 
             {{ form_end(form) }}
 

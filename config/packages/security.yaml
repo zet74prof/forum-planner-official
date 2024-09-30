@@ -1,8 +1,4 @@
 security:
-    role_hierarchy:
-        ROLE_USER: ROLE_SEMI_IDENTIFIED
-        ROLE_SEMI_IDENTIFIED: ROLE_FULL_IDENTIFIED
-        ROLE_FULL_IDENTIFIED: ROLE_ADMIN
 
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
@@ -48,6 +44,7 @@ security:
         - { path: ^/logout, role: PUBLIC_ACCESS }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
         - { path: ^/profil, role: ROLE_USER }
+        - { path: ^/user, role: ROLE_USER }
 
 when@test:
     security:

@@ -3,58 +3,86 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\RegistrationType;
+use App\Form\UserRolesType;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Security\EmailVerifier;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
     private GoogleAuthenticatorInterface $googleAuthenticator;
-
-    public function __construct(GoogleAuthenticatorInterface $googleAuthenticator)
+    public function __construct(GoogleAuthenticatorInterface $googleAuthenticator, private EmailVerifier $emailVerifier)
     {
         $this->googleAuthenticator = $googleAuthenticator;
     }
 
-    #[Route('/register', name: 'app_registration_register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    #[Route('/register', name: 'app_register')]
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+        $form = $this->createForm(RegistrationType::class, $user);
 
-        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plaintextPassword = $user->getPassword();
+            // Encode the password
+            $user->setPassword(
+                $passwordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
 
-            // Vérification du mot de passe avec regex
-            if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $plaintextPassword)) {
-                // Ajoute un message d'erreur et renvoie le formulaire
-                $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractères, dont une lettre majuscule, une lettre minuscule, un chiffre, et un caractère spécial.');
-                return $this->render('security/register.html.twig', [
-                    'form' => $form->createView(),
-                ]);
-            }
+            // Set additional fields
+            $user->setNom($form->get('nom')->getData());
+            $user->setPrenom($form->get('prenom')->getData());
 
-            // Hashage du mot de passe
-            $hashedPassword = $passwordHasher->hashPassword($user, $plaintextPassword);
-            $user->setPassword($hashedPassword);
-
-            // Persist et flush de l'utilisateur dans la base de données
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                (new TemplatedEmail())
+                    ->from(new Address('info@fplanner.com', 'ForumPlanner Bot'))
+                    ->to((string) $user->getEmail())
+                    ->subject('Please Confirm your Email')
+                    ->htmlTemplate('security/confirmation_email.html.twig')
+            );
+
+            // Redirect to login or another page
+            return $this->redirectToRoute('app_verify_email');
         }
 
         return $this->render('security/register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        // validate email confirmation link, sets User::isVerified=true and persists
+        try {
+            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+        } catch (VerifyEmailExceptionInterface $exception) {
+            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+
+            return $this->redirectToRoute('app_register');
+        }
+
+        // @TODO Change the redirect on success and handle or remove the flash message in your templates
+        $this->addFlash('success', 'Your email address has been verified.');
+
+        return $this->redirectToRoute('app_profilesecurity');
+    }
 }

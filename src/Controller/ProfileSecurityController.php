@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\UserRolesType;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,9 +28,12 @@ class ProfileSecurityController extends AbstractController
 
         $fa = $user->getEnable2fa();
 
+        $isverified = $user->getIsVerified();
+
         return $this->render('profile/security.html.twig', [
             '2fa' => $fa,
             'user' => $user,
+            'isVerified' => $isverified
         ]);
     }
 

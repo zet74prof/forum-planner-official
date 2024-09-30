@@ -1,0 +1,26 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="p-6 font-sans">
+    <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6 text-center">
+            <h1 class="text-2xl font-bold text-gray-800">Hi! Please confirm your email! ✨</h1>
+
+            <p class="mt-4 text-gray-600">
+                Please confirm your email address by clicking the following link:
+            </p>
+
+            <a href="{{ signedUrl|raw }}"
+               class="inline-block mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-all duration-200">
+                Confirm my Email
+            </a>
+
+            <p class="mt-4 text-gray-500">
+                This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+            </p>
+        </div>
+
+        <div class="bg-gray-50 p-4 text-center">
+            <p class="text-gray-500">Cheers!</p>
+        </div>
+    </div>
+</div>

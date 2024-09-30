@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49da8a0c941094f1880615ebff04d9bb",
+    "content-hash": "81255f54642094c0838f8762c45f4345",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2367,86 +2367,6 @@
             "time": "2024-06-18T17:29:00+00:00"
         },
         {
-            "name": "sonata-project/google-authenticator",
-            "version": "2.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sonata-project/GoogleAuthenticator.git",
-                "reference": "71a4189228f93a9662574dc8c65e77ef55061b59"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/GoogleAuthenticator/zipball/71a4189228f93a9662574dc8c65e77ef55061b59",
-                "reference": "71a4189228f93a9662574dc8c65e77ef55061b59",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.3 || ^8.0"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "^5.1.8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Google\\Authenticator\\": "src/",
-                    "Sonata\\GoogleAuthenticator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Thomas Rabaix",
-                    "email": "thomas.rabaix@gmail.com"
-                },
-                {
-                    "name": "Christian Stocker",
-                    "email": "me@chregu.tv"
-                },
-                {
-                    "name": "Andre DeMarre",
-                    "homepage": "http://www.devnetwork.net/viewtopic.php?f=50&t=94989"
-                }
-            ],
-            "description": "Library to integrate Google Authenticator into a PHP project",
-            "homepage": "https://github.com/sonata-project/GoogleAuthenticator",
-            "keywords": [
-                "google authenticator"
-            ],
-            "support": {
-                "issues": "https://github.com/sonata-project/GoogleAuthenticator/issues",
-                "source": "https://github.com/sonata-project/GoogleAuthenticator/tree/2.3.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/OskarStark",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/VincentLanglet",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/core23",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/wbloszyk",
-                    "type": "github"
-                }
-            ],
-            "abandoned": true,
-            "time": "2021-02-15T19:23:18+00:00"
-        },
-        {
             "name": "spomky-labs/otphp",
             "version": "11.3.0",
             "source": {
@@ -4677,16 +4597,16 @@
         },
         {
             "name": "symfony/mailer",
-            "version": "v7.1.2",
+            "version": "v7.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mailer.git",
-                "reference": "8fcff0af9043c8f8a8e229437cea363e282f9aee"
+                "reference": "bbf21460c56f29810da3df3e206e38dfbb01e80b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mailer/zipball/8fcff0af9043c8f8a8e229437cea363e282f9aee",
-                "reference": "8fcff0af9043c8f8a8e229437cea363e282f9aee",
+                "url": "https://api.github.com/repos/symfony/mailer/zipball/bbf21460c56f29810da3df3e206e38dfbb01e80b",
+                "reference": "bbf21460c56f29810da3df3e206e38dfbb01e80b",
                 "shasum": ""
             },
             "require": {
@@ -4737,7 +4657,7 @@
             "description": "Helps sending emails",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/mailer/tree/v7.1.2"
+                "source": "https://github.com/symfony/mailer/tree/v7.1.5"
             },
             "funding": [
                 {
@@ -4753,7 +4673,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-28T08:00:31+00:00"
+            "time": "2024-09-08T12:32:26+00:00"
         },
         {
             "name": "symfony/messenger",
@@ -7863,6 +7783,99 @@
                 }
             ],
             "time": "2024-08-12T09:59:40+00:00"
+        },
+        {
+            "name": "symfonycasts/reset-password-bundle",
+            "version": "v1.22.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
+                "reference": "d9cf4395c0a19a3093bc51b10f508b38f98117f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/d9cf4395c0a19a3093bc51b10f508b38f98117f5",
+                "reference": "d9cf4395c0a19a3093bc51b10f508b38f98117f5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=8.1.10",
+                "symfony/config": "^5.4 | ^6.0 | ^7.0",
+                "symfony/dependency-injection": "^5.4 | ^6.0 | ^7.0",
+                "symfony/deprecation-contracts": "^2.2 | ^3.0",
+                "symfony/http-kernel": "^5.4 | ^6.0 | ^7.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.0",
+                "doctrine/doctrine-bundle": "^2.8",
+                "doctrine/orm": "^2.13",
+                "phpstan/phpstan": "^1.11.x-dev",
+                "symfony/framework-bundle": "^5.4 | ^6.0 | ^7.0",
+                "symfony/phpunit-bridge": "^5.4 | ^6.0 | ^7.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "SymfonyCasts\\Bundle\\ResetPassword\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Symfony bundle that adds password reset functionality.",
+            "support": {
+                "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.22.0"
+            },
+            "time": "2024-06-06T11:59:57+00:00"
+        },
+        {
+            "name": "symfonycasts/verify-email-bundle",
+            "version": "v1.17.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SymfonyCasts/verify-email-bundle.git",
+                "reference": "f72af149070b39ef82a7095074378d0a98b4d2ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/f72af149070b39ef82a7095074378d0a98b4d2ef",
+                "reference": "f72af149070b39ef82a7095074378d0a98b4d2ef",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=8.1",
+                "symfony/config": "^5.4 | ^6.0 | ^7.0",
+                "symfony/dependency-injection": "^5.4 | ^6.0 | ^7.0",
+                "symfony/deprecation-contracts": "^2.2 | ^3.0",
+                "symfony/http-kernel": "^5.4 | ^6.0 | ^7.0",
+                "symfony/routing": "^5.4 | ^6.0 | ^7.0"
+            },
+            "require-dev": {
+                "doctrine/orm": "^2.7",
+                "doctrine/persistence": "^2.0",
+                "symfony/framework-bundle": "^5.4 | ^6.0 | ^7.0",
+                "symfony/phpunit-bridge": "^5.4 | ^6.0 | ^7.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "SymfonyCasts\\Bundle\\VerifyEmail\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Simple, stylish Email Verification for Symfony",
+            "support": {
+                "issues": "https://github.com/SymfonyCasts/verify-email-bundle/issues",
+                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.17.0"
+            },
+            "time": "2024-03-17T02:29:53+00:00"
         },
         {
             "name": "twig/extra-bundle",

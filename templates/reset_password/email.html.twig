@@ -1,0 +1,26 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="p-6 font-sans">
+    <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6 text-center">
+            <h1 class="text-2xl font-bold text-gray-800">Hi!</h1>
+
+            <p class="mt-4 text-gray-600">
+                To reset your password, please visit the following link:
+            </p>
+
+            <a href="{{ url('app_reset_password', {token: resetToken.token}) }}"
+               class="inline-block mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-all duration-200">
+                {{ url('app_reset_password', {token: resetToken.token}) }}
+            </a>
+
+            <p class="mt-4 text-gray-500">
+                This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            </p>
+        </div>
+
+        <div class="bg-gray-50 p-4 text-center">
+            <p class="text-gray-500">Cheers!</p>
+        </div>
+    </div>
+</div>

@@ -62,29 +62,29 @@ class TwoFactorController extends AbstractController
     }
 
     #[Route('/check-2fa', name: 'app_2fa_check', methods: ['POST'])]
-public function check2FA(Request $request): Response
-{
-    $user = $this->getUser();
+    public function check2FA(Request $request): Response
+    {
+        $user = $this->getUser();
 
-    if (!$user) {
-        throw $this->createAccessDeniedException('Utilisateur non authentifié.');
+        if (!$user) {
+            throw $this->createAccessDeniedException('Utilisateur non authentifié.');
+        }
+
+        $code = $request->request->get('auth_code');
+
+        if (empty($code)) {
+            $this->addFlash('error', 'Veuillez entrer le code de vérification.');
+            return $this->redirectToRoute('app_2fa_setup');
+        }
+
+        if ($this->googleAuthenticator->checkCode($user, (string)$code)) {
+            $user->setEnable2fa(true);
+            $this->entityManager->flush();
+            $this->addFlash('success', 'L\'authentification à deux facteurs a été activée avec succès.');
+            return $this->redirectToRoute('app_profilesecurity');
+        } else {
+            $this->addFlash('error', 'Le code de vérification est incorrect.');
+            return $this->redirectToRoute('app_2fa_setup');
+        }
     }
-
-    $code = $request->request->get('auth_code');
-
-    if (empty($code)) {
-        $this->addFlash('error', 'Veuillez entrer le code de vérification.');
-        return $this->redirectToRoute('app_2fa_setup');
-    }
-
-    if ($this->googleAuthenticator->checkCode($user, (string)$code)) {
-        $user->setEnable2fa(true);
-        $this->entityManager->flush();
-        $this->addFlash('success', 'L\'authentification à deux facteurs a été activée avec succès.');
-        return $this->redirectToRoute('app_profilesecurity');
-    } else {
-        $this->addFlash('error', 'Le code de vérification est incorrect.');
-        return $this->redirectToRoute('app_2fa_setup');
-    }
-}
 }
