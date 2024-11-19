@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\StandRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StandRepository::class)]
@@ -24,12 +25,9 @@ class Stand
     #[ORM\Column]
     private ?int $capacity = null;
 
-    #[ORM\Column]
-    private ?int $duration = null;
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $duration = null;
 
-    /**
-     * @var Collection<int, Timeslot>
-     */
     #[ORM\OneToMany(targetEntity: Timeslot::class, mappedBy: 'stands')]
     private Collection $timeslots;
 
@@ -37,9 +35,16 @@ class Stand
     #[ORM\JoinColumn(nullable: false)]
     private ?Forum $forum = null;
 
+    /**
+     * @var Collection<int, Evaluation>
+     */
+    #[ORM\OneToMany(targetEntity: Evaluation::class, mappedBy: 'stand')]
+    private Collection $evaluations;
+
     public function __construct()
     {
         $this->timeslots = new ArrayCollection();
+        $this->evaluations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,12 +88,12 @@ class Stand
         return $this;
     }
 
-    public function getDuration(): ?int
+    public function getDuration(): ?\DateTimeInterface
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration): static
+    public function setDuration(\DateTimeInterface $duration): static
     {
         $this->duration = $duration;
 
@@ -135,5 +140,46 @@ class Stand
         $this->forum = $forum;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Evaluation>
+     */
+    public function getEvaluations(): Collection
+    {
+        return $this->evaluations;
+    }
+
+    public function addEvaluation(Evaluation $evaluation): static
+    {
+        if (!$this->evaluations->contains($evaluation)) {
+            $this->evaluations->add($evaluation);
+            $evaluation->setStand($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvaluation(Evaluation $evaluation): static
+    {
+        if ($this->evaluations->removeElement($evaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($evaluation->getStand() === $this) {
+                $evaluation->setStand(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAverageNote(): float
+    {
+        $notes = $this->getEvaluations();
+        $sum = 0;
+        foreach ($notes as $note) {
+            $sum += $note->getNote();
+        }
+
+        return $sum / count($notes);
     }
 }

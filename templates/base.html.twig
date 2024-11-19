@@ -24,12 +24,6 @@
 
     <header class="absolute inset-x-0 top-0 z-50">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-            <div class="flex lg:flex-1">
-                <a href="/" class="-m-1.5 p-1.5">
-                    <span class="sr-only">forumPlanner</span>
-                    <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Logo">
-                </a>
-            </div>
             <div class="flex lg:hidden">
                 <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                     <span class="sr-only">Open main menu</span>
@@ -40,9 +34,9 @@
             </div>
             <div class="hidden lg:flex lg:gap-x-12 z-50">
                 <a href="{{ path('app_user_index')}}" class="text-sm font-semibold leading-6 text-gray-900">Users</a>
-                <a href="#" class="text-sm font-semibold leading-6 text-gray-900">kekma.net</a>
-                <a href="#" class="text-sm font-semibold leading-6 text-gray-900">runthegauntlet.org</a>
-                <a href="#" class="text-sm font-semibold leading-6 text-gray-900">seegore.com</a>
+                <a href="{{ path('app_forum_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Forums</a>
+                <a href="{{ path('app_stand_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Stands</a>
+                <a href="{{ path('app_evaluation_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Evaluation</a>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
                 <a href="{{ path('app_register') }}" class="text-sm font-semibold leading-6 text-gray-900">Register <span aria-hidden="true">&rarr;</span></a>

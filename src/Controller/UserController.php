@@ -96,7 +96,7 @@ final class UserController extends AbstractController
         $allRoles = $roleHierarchy;
 
         $form = $this->createForm(UserRolesType::class, $user, [
-            'roles' => array_combine($allRoles, $allRoles),
+            'roles' => $allRoles,
         ]);
         $form->handleRequest($request);
 
