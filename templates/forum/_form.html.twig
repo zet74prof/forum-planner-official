@@ -1,0 +1,27 @@
+ {{ form_start(form) }}
+
+            <div class="mb-4">
+                {{ form_label(form.title, 'Title', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.title, {'attr': {'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.location, 'Location', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.location, {'attr': {'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.location) }}
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {{ button_label|default('Save') }}
+                </button>
+            </div>
+
+ {{ form_end(form) }}

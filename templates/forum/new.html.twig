@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Forum{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8 px-4 mt-20">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Create New Forum</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-6 relative z-50">
+            {{ form_start(form) }}
+
+            <div class="mb-4">
+                {{ form_label(form.title, 'Title', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.title, {'attr': {'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.location, 'Location', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.location, {'attr': {'class': 'mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.location) }}
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Save
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

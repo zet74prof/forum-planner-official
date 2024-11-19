@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stand{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8 mt-20 relative z-50">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Stand Details</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <table class="min-w-full divide-y divide-gray-200">
+                <tbody>
+                <tr>
+                    <th class="px-4 py-2 text-left">Id</th>
+                    <td class="px-4 py-2">{{ stand.id }}</td>
+                </tr>
+                <tr>
+                    <th class="px-4 py-2 text-left">Title</th>
+                    <td class="px-4 py-2">{{ stand.title }}</td>
+                </tr>
+                <tr>
+                    <th class="px-4 py-2 text-left">Description</th>
+                    <td class="px-4 py-2">{{ stand.description }}</td>
+                </tr>
+                <tr>
+                    <th class="px-4 py-2 text-left">Capacity</th>
+                    <td class="px-4 py-2">{{ stand.capacity }}</td>
+                </tr>
+                <tr>
+                    <th class="px-4 py-2 text-left">Duration</th>
+                    <td class="px-4 py-2">{{ stand.duration ? stand.duration|date('H:i') : 'N/A' }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex justify-between items-center mt-4">
+            <a href="{{ path('app_stand_index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-200">
+                Back to list
+            </a>
+
+            <div class="flex space-x-4">
+                <a href="{{ path('app_stand_edit', {'id': stand.id}) }}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition duration-200">
+                    Edit
+                </a>
+
+                <form method="post" action="{{ path('app_stand_delete', {'id': stand.id}) }}" class="inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ stand.id) }}">
+                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Add Evaluation</h2>
+            <form method="post" action="{{ path('app_evaluation_create', {'standId': stand.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('create_evaluation') }}">
+                <div class="mb-4">
+                    <label for="rating" class="block text-gray-700">Rating (0-5)</label>
+                    <input type="number" step="0.1" min="0" max="5" id="rating" name="rating" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="comment" class="block text-gray-700">Comment</label>
+                    <textarea id="comment" name="comment" rows="4" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
+                </div>
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200">
+                    Submit Evaluation
+                </button>
+            </form>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-bold mt-8 mb-4">Evaluations</h2>
+            {% if stand.evaluations|length > 0 %}
+                <p class="mb-4">Moyenne du stand : {{ stand.averageNote }}</p>
+            {% endif %}            <div class="bg-white shadow-md rounded-lg p-6">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 text-left">Note</th>
+                            <th class="px-4 py-2 text-left">Commentaire</th>
+                            <th class="px-4 py-2 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evaluation in stand.evaluations %}
+                            <tr>
+                                <td class="px-4 py-2">{{ evaluation.note }}</td>
+                                <td class="px-4 py-2">{{ evaluation.commentaire }}</td>
+                                <td class="px-4 py-2">
+                                    <a href="{{ path('app_evaluation_edit', {'id': evaluation.id}) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <form method="post" action="{{ path('app_evaluation_delete', {'id': evaluation.id}) }}" class="inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete_evaluation' ~ evaluation.id) }}">
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-2 text-center">No evaluations found</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Stand{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8 px-4 mt-40 relative z-50 bg-gray-50">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Create New Stand</h1>
+
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+        <div class="space-y-4">
+            <div>
+                {{ form_label(form.title, 'Title', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.title, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div>
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div>
+                {{ form_label(form.capacity, 'Capacity', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.capacity, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.capacity) }}
+            </div>
+
+            <div>
+                {{ form_label(form.duration, 'Duration', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.duration, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.duration) }}
+            </div>
+
+            <div>
+                {{ form_label(form.forum, 'Forum', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.forum, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                {{ form_errors(form.forum) }}
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <a href="{{ path('app_stand_index') }}" class="text-gray-500 hover:text-gray-800">Back to list</a>
+            <button type="submit" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
