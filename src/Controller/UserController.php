@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserRolesType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -135,4 +136,5 @@ final class UserController extends AbstractController
             'qrCode' => $qrCode,
         ]);
     }
+
 }
