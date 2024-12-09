@@ -4,30 +4,27 @@
 
 {% block body %}
     <div class="container mx-auto py-8 px-4 mt-20 relative z-50">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Forum Index</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Mes Forums</h1>
 
         <div class="overflow-x-auto bg-white shadow-md rounded-lg relative z-50">
 
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-100 border-b border-gray-200">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Id</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titre</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lieu</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                 {% for forum in forums %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ forum.id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ forum.title }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ forum.description }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ forum.location }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ forum.description }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-4">
-                            <a href="{{ path('app_forum_show', {'id': forum.id}) }}" class="text-indigo-600 hover:text-indigo-900">Show</a>
-                            <a href="{{ path('app_forum_edit', {'id': forum.id}) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                            <a href="{{ path('app_forum_edit', {'id': forum.id}) }}" class="text-indigo-600 hover:text-indigo-900">Modifier</a>
                         </td>
                     </tr>
                 {% else %}
