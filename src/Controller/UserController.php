@@ -24,6 +24,7 @@ final class UserController extends AbstractController
     }
 
     #[Route(name: 'app_user_index', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
@@ -32,6 +33,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -52,6 +54,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function show(User $user): Response
     {
         return $this->render('user/show.html.twig', [
@@ -60,6 +63,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UserRolesType::class, $user);
@@ -78,6 +82,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
@@ -92,7 +97,7 @@ final class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function roles(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $roleHierarchy = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER'];
+        $roleHierarchy = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_FORUM_ORGANIZER', 'ROLE_FORUM_ATTENDEE'];
         $allRoles = $roleHierarchy;
 
         $form = $this->createForm(UserRolesType::class, $user, [
