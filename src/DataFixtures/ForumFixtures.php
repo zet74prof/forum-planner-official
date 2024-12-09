@@ -2,41 +2,30 @@
 
 namespace App\DataFixtures;
 
+use AllowDynamicProperties;
 use App\Entity\Forum;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ForumFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
+    public function load(ObjectManager $manager)
     {
-        // Création d'un générateur Faker
         $faker = Factory::create('fr_FR');
 
-        // Récupérer les utilisateurs déjà existants depuis la base de données
-        $users = $manager->getRepository(User::class)->findAll();
-
-        // Vérification s'il y a des utilisateurs dans la base
-        if (empty($users)) {
-            // Si aucun utilisateur n'existe, il faudra ajouter un message ou en créer,
-            echo "Aucun utilisateur trouvé. Assurez-vous d'avoir exécuté AppFixtures.php.";
-            return;
-        }
-
-        // Génération de forums
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $forum = new Forum();
-            $forum->setTitle($faker->sentence(6)); // Titre avec environ 6 mots
-            $forum->setDescription($faker->paragraph(3)); // Description réaliste
-            $forum->setLocation($faker->city); // Ville aléatoire
-            $forum->setUser($faker->randomElement($users)); // Associe un utilisateur aléatoire
+            $forum->setTitle('Forum ' . $faker->sentence(3));
+            $forum->setDescription($faker->paragraph(3));
+            $forum->setLocation($faker->city);
+            $forum->setUser($this->getReference('user_' . $faker->numberBetween(0, 9)));
 
             $manager->persist($forum);
         }
 
-        // Sauvegarde des forums
         $manager->flush();
     }
 }
