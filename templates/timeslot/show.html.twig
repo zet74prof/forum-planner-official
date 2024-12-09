@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Timeslot{% endblock %}
+
+{% block body %}
+    <h1>Timeslot</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ timeslot.id }}</td>
+            </tr>
+            <tr>
+                <th>StartDateTime</th>
+                <td>{{ timeslot.startDateTime ? timeslot.startDateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_timeslot_index') }}">back to list</a>
+
+    <a href="{{ path('app_timeslot_edit', {'id': timeslot.id}) }}">edit</a>
+
+    {{ include('timeslot/_delete_form.html.twig') }}
+{% endblock %}
