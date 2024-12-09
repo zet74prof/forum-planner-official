@@ -33,14 +33,21 @@
                 </button>
             </div>
             <div class="hidden lg:flex lg:gap-x-12 z-50">
+                {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_user_index')}}" class="text-sm font-semibold leading-6 text-gray-900">Users</a>
+                {% endif %}
                 <a href="{{ path('app_forum_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Mes Forums</a>
                 <a href="{{ path('app_stand_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Stands</a>
                 <a href="{{ path('app_evaluation_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Evaluation</a>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                <a href="{{ path('app_register') }}" class="text-sm font-semibold leading-6 text-gray-900">Register <span aria-hidden="true">&rarr;</span></a>
-            </div>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <a href="{{ path('app_profilesecurity') }}" class="text-sm font-semibold leading-6 text-gray-900">Profile <span aria-hidden="true">&rarr;</span></a>
+    {% else %}
+        <a href="{{ path('app_register') }}" class="text-sm font-semibold leading-6 text-gray-900 border-r border-neutral-600 pr-2">Register</a>
+        <a href="{{ path('app_login') }}" class="text-sm font-semibold leading-6 text-gray-900 pl-2">Login</a>
+    {% endif %}
+</div>
         </nav>
         <div class="lg:hidden" role="dialog" aria-modal="true">
             <div class="fixed inset-0 z-50"></div>

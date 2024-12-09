@@ -17,8 +17,8 @@ class UserRolesType extends AbstractType
                 'choices' => [
                     'User' => 'ROLE_USER',
                     'Admin' => 'ROLE_ADMIN',
-                    'Manager' => 'ROLE_MANAGER',
-                    'Dieu' => 'ROLE_DIEU',
+                    'Organisateur' => 'ROLE_FORUM_ORGANIZER',
+                    'Participant' => 'ROLE_FORUM_ATTENDEE',
                 ],
                 'multiple' => true,
                 'expanded' => true,
