@@ -16,8 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TwoFactorController extends AbstractController
 {
-    private GoogleAuthenticatorInterface $googleAuthenticator;
-    private EntityManagerInterface $entityManager;
 
     public function __construct(GoogleAuthenticatorInterface $googleAuthenticator, EntityManagerInterface $entityManager)
     {
@@ -59,6 +57,24 @@ class TwoFactorController extends AbstractController
         return $this->render('security/2fa_setup.html.twig', [
             'qrCodeUrl' => $qrCodeUrl,
         ]);
+    }
+
+    #[Route('/disable-2fa', name: 'app_2fa_disable')]
+    public function disable2FA(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Utilisateur non authentifié.');
+        }
+
+        $user->setGoogleAuthenticatorSecret(null);
+        $user->setEnable2fa(false);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'L\'authentification à deux facteurs a été désactivée.');
+
+        return $this->redirectToRoute('app_profilesecurity');
     }
 
     #[Route('/check-2fa', name: 'app_2fa_check', methods: ['POST'])]

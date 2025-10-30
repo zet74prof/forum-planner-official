@@ -16,14 +16,22 @@
             <img src="{{ qrCodeUrl }}" alt="QR Code" class="border border-gray-300 rounded-md">
         </div>
 
-        <div class="flex justify-center mx-auto gap-2">
-            <form method="post" action="{{ path('app_2fa_check') }}" class="space-y-4">
-                <div>
-                    <label for="auth_code" class="block font-medium text-gray-700">Entrez le code généré par votre application :</label>
-                    <input type="text" id="auth_code" name="auth_code" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Activer l'authentification à deux facteurs</button>
-            </form>
-        </div>
+        <form method="post" action="{{ path('app_2fa_check') }}" class="space-y-4 text-center">
+            <div class="flex justify-center gap-2">
+                {% for i in 0..5 %}
+                    {% if i == 3 %}
+                        <div class="w-4"></div>
+                    {% endif %}
+                    <input type="text"
+                           id="auth_code_{{ i }}"
+                           name="auth_code[]"
+                           maxlength="1"
+                           class="w-12 h-12 text-center text-xl border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                {% endfor %}
+            </div>
+            <button type="submit" class="mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                Activer l'authentification à deux facteurs
+            </button>
+        </form>
     </div>
 {% endblock %}
